@@ -6,21 +6,24 @@
 
 
 bool_t destroy_1_svc(int *result, struct svc_req *rqstp) {
+    printf("Petición recibida: DESTROY\n");
     *result = destroy();
     return TRUE;
 }
 
 bool_t set_value_1_svc(struct params args, int *result,  struct svc_req *rqstp) {
+    printf("Petición recibida: SET_VALUE\n");
     /* Creamos la estructura Paquete y le pasamos los valores */
     struct Paquete p = {args.value3.x, args.value3.y, args.value3.z};
 
     /* Llamamos a set_value */
-    *result = set_value(args.key, args.value1, args.N_value2, args.V_value2.float_array_val, p);
+    *result = set_value(args.key, args.value1, args.N_value2, args.V_value2.V_value2_val, p);
 
     return TRUE;
 }
 
 bool_t get_value_1_svc(char *key, struct get_value_res *res,  struct svc_req *rqstp) {
+    printf("Petición recibida: GET_VALUE\n");
     /* Declaramos nuestros datos */
     char v1[256]; int n2; float v2[32]; struct Paquete v3;
 
@@ -30,13 +33,13 @@ bool_t get_value_1_svc(char *key, struct get_value_res *res,  struct svc_req *rq
         /* Si hubo éxito, guardamos los valores obtenidos */
         res->value1 = strdup(v1);
         res->N_value2 = n2;
-        res->V_value2.float_array_len = n2;
-        res->V_value2.float_array_val = malloc(n2 * sizeof(float));
+        res->V_value2.V_value2_len = n2;
+        res->V_value2.V_value2_val = malloc(n2 * sizeof(float));
 
         /* Bucle para almacenar los float */
         for (int i = 0; i < n2; i++){
-                res->V_value2.float_array_val[i] = v2[i];
-            }
+                res->V_value2.V_value2_val[i] = v2[i];
+        }
         
         /* Almacenamos los valores de las variables del struct Paquete */
         res->value3.x = v3.x; 
@@ -45,29 +48,32 @@ bool_t get_value_1_svc(char *key, struct get_value_res *res,  struct svc_req *rq
 
     } else {
         /* Si no se encontró, asignamos valores nulos */
-        res->value1 = "";
-        res->V_value2.float_array_len = 0;
-        res->V_value2.float_array_val = NULL;
+        res->value1 = strdup("");
+        res->V_value2.V_value2_len= 0;
+        res->V_value2.V_value2_val = NULL;
     }
 
     return TRUE;
 }
 
 bool_t modify_value_1_svc(struct params args, int *result,  struct svc_req *rqstp) {
+    printf("Petición recibida: MODIFY_VALUE\n");
     /* Creamos la estructura Paquete y le pasamos los valores */
     struct Paquete p = {args.value3.x, args.value3.y, args.value3.z};
 
     /* Llamamos a modify_value */
-    *result = modify_value(args.key, args.value1, args.N_value2, args.V_value2.float_array_val, p);
+    *result = modify_value(args.key, args.value1, args.N_value2, args.V_value2.V_value2_val, p);
     return TRUE;
 }
 
 bool_t delete_key_1_svc(char *key, int *result,  struct svc_req *rqstp) {
+    printf("Petición recibida: DELETE_KEY\n");
     *result = delete_key(key);
     return TRUE;
 }
 
 bool_t exist_1_svc(char *key, int *result, struct svc_req *rqstp) {
+    printf("Petición recibida: EXIST\n");
     *result = exist(key);
     return TRUE;
 }

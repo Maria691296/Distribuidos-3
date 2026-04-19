@@ -17,13 +17,13 @@ static int init_rpc() {
 
     char *ip = getenv("IP_TUPLAS");
     if (ip == NULL){
-        perror("Error: Variable de entorno IP_TUPLAS no definida")
+        perror("Error: Variable de entorno IP_TUPLAS no definida");
         return -1;
     }
 
     clnt = clnt_create(ip, CLAVES_RPC, CLAVES_VER, "tcp");
     if (clnt == NULL){
-        perror("Error: No se pudo crear el cliente")
+        perror("Error: No se pudo crear el cliente");
         return -1; // Error de sistema RPC 
     }
     
@@ -59,8 +59,8 @@ int set_value(char *key, char *value1, int N_value2, float *V_value2, struct Paq
     args.N_value2 = N_value2;
     
     /* Para los arrays variables, rpcgen crea campos _len y _val */
-    args.V_value2_len = N_value2;
-    args.V_value2_val = V_value2;
+    args.V_value2.V_value2_len = N_value2;
+    args.V_value2.V_value2_val = V_value2;
     
     /* Copiamos el paquete */
     args.value3.x = value3.x;
@@ -84,6 +84,7 @@ int get_value(char *key, char *value1, int *N_value2, float *V_value2, struct Pa
     }
 
     struct get_value_res res;
+    memset(&res, 0, sizeof(res));
     enum clnt_stat status = get_value_1(key, &res, clnt);
 
     if (status != RPC_SUCCESS){
@@ -94,7 +95,11 @@ int get_value(char *key, char *value1, int *N_value2, float *V_value2, struct Pa
         /* Copiamos la respuesta del servidor a los parámetros de salida */
         strcpy(value1, res.value1);
         *N_value2 = res.N_value2;
-        memcpy(V_value2, res.V_value2.V_value2_val, res.N_value2 * sizeof(float));
+
+        /* Bucle para almacenar los float */
+        for (int i = 0; i < *N_value2; i++){
+                V_value2[i] = res.V_value2.V_value2_val[i];
+        }
         
         value3->x = res.value3.x;
         value3->y = res.value3.y;
