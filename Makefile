@@ -17,8 +17,8 @@ libproxyclaves.so: proxy-rpc.c clavesRPC.h
 	$(CC) $(CFLAGS) -shared -o libproxyclaves.so proxy-rpc.c clavesRPC_clnt.c clavesRPC_xdr.c
 
 # Servidor
-servidor_rpc: clavesRPC.h libclaves.so servidor.c
-	$(CC) $(CFLAGS) servidor.c clavesRPC_svc.c clavesRPC_xdr.c -o servidor_rpc -L. -lclaves -Wl,-rpath=. $(LDLIBS)
+servidor_rpc: clavesRPC.h libclaves.so clavesRPC_server.c
+	$(CC) $(CFLAGS) clavesRPC_server.c clavesRPC_svc.c clavesRPC_xdr.c -o servidor_rpc -L. -lclaves -Wl,-rpath=. $(LDLIBS)
 
 # Clientes
 cliente1: app-cliente-1.c libproxyclaves.so

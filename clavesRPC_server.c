@@ -4,7 +4,11 @@
  * as a guideline for developing your own functions.
  */
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "clavesRPC.h"
+#include "claves.h"
 
 bool_t
 destroy_1_svc(int *result, struct svc_req *rqstp)
@@ -25,10 +29,10 @@ set_value_1_svc(struct params arg1, int *result,  struct svc_req *rqstp)
 
 	printf("Petición recibida: SET_VALUE\n");
     /* Creamos la estructura Paquete y le pasamos los valores */
-    struct Paquete p = {args.value3.x, args.value3.y, args.value3.z};
+    struct Paquete p = {arg1.value3.x, arg1.value3.y, arg1.value3.z};
 
     /* Llamamos a set_value */
-    *result = set_value(args.key, args.value1, args.N_value2, args.V_value2.V_value2_val, p);
+    *result = set_value(arg1.key, arg1.value1, arg1.N_value2, arg1.V_value2.V_value2_val, p);
     retval = TRUE;
 
 	return retval;
@@ -44,29 +48,29 @@ get_value_1_svc(char *key, struct get_value_res *result,  struct svc_req *rqstp)
     char v1[256]; int n2; float v2[32]; struct Paquete v3;
 
     /* Guardamos en result el resultado de llamar a la función */
-    res->result = get_value(key, v1, &n2, v2, &v3);
-    if (res->result == 0) {
+    result->result = get_value(key, v1, &n2, v2, &v3);
+    if (result->result == 0) {
         /* Si hubo éxito, guardamos los valores obtenidos */
-        res->value1 = strdup(v1);
-        res->N_value2 = n2;
-        res->V_value2.V_value2_len = n2;
-        res->V_value2.V_value2_val = malloc(n2 * sizeof(float));
+        result->value1 = strdup(v1);
+        result->N_value2 = n2;
+        result->V_value2.V_value2_len = n2;
+        result->V_value2.V_value2_val = malloc(n2 * sizeof(float));
 
         /* Bucle para almacenar los float */
         for (int i = 0; i < n2; i++){
-                res->V_value2.V_value2_val[i] = v2[i];
+                result->V_value2.V_value2_val[i] = v2[i];
         }
         
         /* Almacenamos los valores de las variables del struct Paquete */
-        res->value3.x = v3.x; 
-        res->value3.y = v3.y; 
-        res->value3.z = v3.z;
+        result->value3.x = v3.x; 
+        result->value3.y = v3.y; 
+        result->value3.z = v3.z;
 
     } else {
         /* Si no se encontró, asignamos valores nulos */
-        res->value1 = strdup("");
-        res->V_value2.V_value2_len= 0;
-        res->V_value2.V_value2_val = NULL;
+        result->value1 = strdup("");
+        result->V_value2.V_value2_len= 0;
+        result->V_value2.V_value2_val = NULL;
     }
 
     retval = TRUE;
@@ -75,16 +79,16 @@ get_value_1_svc(char *key, struct get_value_res *result,  struct svc_req *rqstp)
 }
 
 bool_t
-modify_value_1_svc(struct params< arg1, int *result,  struct svc_req *rqstp)
+modify_value_1_svc(struct params arg1, int *result,  struct svc_req *rqstp)
 {
 	bool_t retval;
 
 	printf("Petición recibida: MODIFY_VALUE\n");
     /* Creamos la estructura Paquete y le pasamos los valores */
-    struct Paquete p = {args.value3.x, args.value3.y, args.value3.z};
+    struct Paquete p = {arg1.value3.x, arg1.value3.y, arg1.value3.z};
 
     /* Llamamos a modify_value */
-    *result = modify_value(args.key, args.value1, args.N_value2, args.V_value2.V_value2_val, p);
+    *result = modify_value(arg1.key, arg1.value1, arg1.N_value2, arg1.V_value2.V_value2_val, p);
     retval = TRUE;
 
 	return retval;
