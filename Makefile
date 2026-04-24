@@ -6,7 +6,7 @@ all: servidor_rpc cliente1 cliente2
 
 # Archivos de soporte RPC
 clavesRPC.h: clavesRPC.x
-	rpcgen -aNM clavesRPC.x
+	rpcgen -NM clavesRPC.x
 
 # Biblioteca claves
 libclaves.so: claves.c claves.h
@@ -28,4 +28,4 @@ cliente2: app-cliente-2.c libproxyclaves.so
 	$(CC) $(CFLAGS) app-cliente-2.c -o cliente2 -L. -lproxyclaves -Wl,-rpath=. $(LDLIBS)
 
 clean:
-	rm -f *.o *.so servidor_rpc cliente1 cliente2 clavesRPC.h clavesRPC_clnt.c clavesRPC_svc.c clavesRPC_xdr.c clavesRPC_server.c clavesRPC_client.c Makefile.clavesRPC
+	rm -f *.o *.so servidor_rpc cliente1 cliente2 clavesRPC.h clavesRPC_clnt.c clavesRPC_svc.c clavesRPC_xdr.c Makefile.clavesRPC
