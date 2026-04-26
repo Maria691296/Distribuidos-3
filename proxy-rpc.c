@@ -84,7 +84,15 @@ int get_value(char *key, char *value1, int *N_value2, float *V_value2, struct Pa
     }
 
     struct get_value_res res;
-    memset(&res, 0, sizeof(res));
+    res.result = 0;
+    res.value1 = NULL;
+    res.N_value2 = 0;
+    res.V_value2.V_value2_len = 0;
+    res.V_value2.V_value2_val = NULL;
+    res.value3.x = 0;
+    res.value3.y = 0;
+    res.value3.z = 0;
+
     enum clnt_stat status = get_value_1(key, &res, clnt);
 
     if (status != RPC_SUCCESS){
