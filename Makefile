@@ -10,7 +10,7 @@ clavesRPC.h: clavesRPC.x
 
 # Biblioteca claves
 libclaves.so: claves.c claves.h
-	$(CC) $(CFLAGS) -shared -o libclaves.so claves.c
+	$(CC) $(CFLAGS) -shared -o libclaves.so claves.c -lpthread
 
 # Biblioteca proxy
 libproxyclaves.so: proxy-rpc.c clavesRPC.h

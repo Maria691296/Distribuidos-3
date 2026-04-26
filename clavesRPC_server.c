@@ -16,7 +16,7 @@ destroy_1_svc(int *result, struct svc_req *rqstp)
 	bool_t retval;
 
 	printf("Petición recibida: DESTROY\n");
-    *result = destroy(); // POR QUE CAPTURAMOS EL RETORNO?
+    *result = destroy();
     retval = TRUE;
 
 	return retval;

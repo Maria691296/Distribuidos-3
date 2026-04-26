@@ -32,12 +32,12 @@ program CLAVES_RPC {
         
         int SET_VALUE(struct params) = 2;
         
-        struct get_value_res GET_VALUE(string key<256>) = 3;
+        struct get_value_res GET_VALUE(string key<255>) = 3;
         
         int MODIFY_VALUE(struct params) = 4;
         
-        int DELETE_KEY(string key<256>) = 5;
+        int DELETE_KEY(string key<255>) = 5;
         
-        int EXIST(string key<256>) = 6;
+        int EXIST(string key<255>) = 6;
     } = 1;
 } = 99;
